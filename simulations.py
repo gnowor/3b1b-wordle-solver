@@ -80,6 +80,11 @@ def simulate_games(
             if hard_mode:
                 for guess, pattern in zip(guesses, patterns, strict=True):
                     choices = get_possible_words(guess, pattern, choices, game_name)
+                    print(f"Choices after hard mode filtering: {len(choices)}")  # Debugging line
+
+            # Handle case where no valid guesses are left
+            if not choices:
+                raise ValueError("No allowed words available after filtering.")
             if brute_force_optimize:
                 next_guess_map[phash] = brute_force_optimal_guess(
                     choices,
