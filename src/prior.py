@@ -23,8 +23,8 @@ def get_word_list(game_name, short=False):
     )
     with Path(file).open(encoding="utf8") as fp:
         result.extend([word.strip() for word in fp])
+    print(f"Loaded {len(result)} words from {file}")  # Debugging line
     return result
-
 
 def get_word_frequencies(game_name, regenerate=False):
     word_freq_map_fname = get_word_freq_map_fname(game_name)
@@ -74,4 +74,7 @@ def get_frequency_based_priors(game_name, n_common=3000, width_under_sigmoid=10)
 def get_true_wordle_prior(game_name):
     words = get_word_list(game_name)
     short_words = get_word_list(game_name, short=True)
-    return {w: int(w in short_words) for w in words}
+    priors = {w: int(w in short_words) for w in words}
+    print(f"Priors: {len(priors)} words with priors")  # Debugging line
+    return priors
+
