@@ -47,6 +47,9 @@ def get_expected_scores(
     look_two_ahead=False,
     n_top_candidates_for_two_step=25,
 ):
+    
+    if len(possible_words) == 0:
+        raise ValueError("No possible words available for guessing.")
     # Currently entropy of distribution
     weights = get_weights(possible_words, priors)
     h0 = entropy_of_distributions(weights)
@@ -125,6 +128,8 @@ def get_score_lower_bounds(allowed_words, possible_words, game_name):
     of possible_words is, this gives a lower bound on the
     possible score for each word in allowed_words
     """
+    if len(possible_words) == 0:
+        raise ValueError("No possible words available for guessing.")
     bucket_counts = get_bucket_counts(allowed_words, possible_words, game_name)
     n = len(possible_words)
     # Probabilities of getting it in 1
@@ -152,7 +157,9 @@ def optimal_guess(
         entropies = get_entropies(allowed_words, possible_words, weights, game_name)
         return allowed_words[np.argmax(entropies)]
 
-    # Just experimenting here...
+    if len(allowed_words) == 0:
+        raise ValueError("No allowed words available.")
+        
     if optimize_for_uniform_distribution:
         expected_scores = get_score_lower_bounds(
             allowed_words,
@@ -167,7 +174,12 @@ def optimal_guess(
             game_name=game_name,
             look_two_ahead=look_two_ahead,
         )
+    
+    if len(expected_scores) == 0:
+        raise ValueError("No expected scores calculated for argmin.")
+
     return allowed_words[np.argmin(expected_scores)]
+
 
 
 def brute_force_optimal_guess(
