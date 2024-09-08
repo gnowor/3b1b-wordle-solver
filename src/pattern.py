@@ -75,15 +75,20 @@ def patterns_to_string(patterns):
 def get_possible_words(guess, pattern, word_list, game_name):
     # Get all patterns between the guess and the word_list
     all_patterns = get_pattern_matrix([guess], word_list, game_name).flatten()
-    
+
     # Filter out words that match the given pattern
     possible_words = list(np.array(word_list)[all_patterns == pattern])
-    
-    # Debugging: print the number of words before and after filtering
+
+    # Debugging: print detailed info
+    print(f"Guess: {guess}, Pattern: {pattern}")
     print(f"Initial word list size: {len(word_list)}")
     print(f"Words remaining after filtering: {len(possible_words)}")
     
+    if not possible_words:
+        print("No possible words remain after filtering.")
+    
     return possible_words
+
 
 def get_word_buckets(guess, possible_words, game_name):
     buckets = [[] for _x in range(3**5)]
